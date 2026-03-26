@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="uz" dir="ltr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
+<meta name="theme-color" content="#1a56db">
+<title>Валюта курси — Ўзбекистон валюта конвертери</title>
+<meta name="description" content="Ўзбекистон Марказий банки курслари бўйича валюта конвертери. UZS ни USD, EUR, RUB, KRW, TRY, GBP га айирбошлаш.">
+<meta name="keywords" content="валюта курси, доллар курси бугун, евро курси, валюта калкулятори, марказий банк курси">
+<meta property="og:title" content="Валюта курси — Ўзбекистон">
+<meta property="og:description" content="Бугунги валюта курслари ва конвертер. UZS ↔ USD, EUR, RUB, KRW">
+<link rel="manifest" href="manifest.json">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>💱</text></svg>">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--primary:#1a56db;--primary-light:#3b82f6;--bg:#f0f4ff;--card:#fff;--text:#1e293b;--text2:#64748b;--text3:#94a3b8;--border:#e2e8f0;--green:#059669;--red:#dc2626;--radius:16px;--shadow:0 1px 3px rgba(0,0,0,.06),0 4px 12px rgba(0,0,0,.04)}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:var(--bg);color:var(--text);min-height:100vh}
+.app{max-width:430px;margin:0 auto;padding:0 16px 100px}
+.header{background:linear-gradient(135deg,var(--primary),var(--primary-light));color:#fff;margin:0 -16px;padding:24px 20px 28px;border-radius:0 0 28px 28px;position:relative;overflow:hidden}
+.header h1{font-size:22px;font-weight:700;margin-bottom:4px}
+.header p{font-size:13px;opacity:.8}
+.card{background:var(--card);border-radius:var(--radius);padding:20px;box-shadow:var(--shadow);margin-top:16px;border:1px solid var(--border)}
+.converter-input{display:flex;flex-direction:column;gap:6px;margin-bottom:16px}
+.converter-input label{font-size:12px;color:var(--text2);font-weight:500;text-transform:uppercase;letter-spacing:.5px}
+.input-row{display:flex;gap:10px}
+.currency-select{display:flex;align-items:center;gap:8px;padding:12px 14px;background:var(--bg);border:1.5px solid var(--border);border-radius:12px;font-size:15px;font-weight:600;min-width:110px;position:relative}
+.currency-select .flag{font-size:22px}
+.currency-select select{position:absolute;inset:0;opacity:0;cursor:pointer;font-size:16px}
+.amount-input{flex:1;padding:12px 16px;border:1.5px solid var(--border);border-radius:12px;font-size:20px;font-weight:600;color:var(--text);outline:none;background:var(--bg);transition:border-color .2s}
+.amount-input:focus{border-color:var(--primary-light);background:#fff}
+.swap-btn{align-self:center;width:44px;height:44px;border-radius:50%;background:var(--primary);color:#fff;border:none;font-size:20px;cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 12px rgba(26,86,219,.3);transition:transform .3s cubic-bezier(.34,1.56,.64,1);margin:4px 0}
+.swap-btn:active{transform:rotate(180deg) scale(.9)}
+.result-box{background:linear-gradient(135deg,#f0fdf4,#ecfdf5);border:1.5px solid #bbf7d0;border-radius:14px;padding:16px 18px;text-align:center;margin-top:12px}
+.result-box .amount{font-size:28px;font-weight:700;color:#059669}
+.result-box .rate{font-size:12px;color:var(--text2);margin-top:4px}
+.rates-grid{display:grid;gap:10px;margin-top:12px}
+.rate-item{display:flex;justify-content:space-between;align-items:center;padding:14px 16px;background:var(--bg);border-radius:12px;transition:transform .15s;cursor:pointer}
+.rate-item:active{transform:scale(.98)}
+.rate-left{display:flex;align-items:center;gap:12px}
+.rate-flag{font-size:28px;width:40px;height:40px;background:#fff;border-radius:10px;display:flex;align-items:center;justify-content:center}
+.rate-code{font-weight:700;font-size:14px}
+.rate-name{font-size:11px;color:var(--text3)}
+.rate-value{font-weight:700;font-size:15px}
+.rate-change{font-size:11px;display:flex;align-items:center;gap:2px;justify-content:flex-end}
+.rate-change.up{color:var(--green)}.rate-change.down{color:var(--red)}
+.section-title{font-size:16px;font-weight:700;margin:24px 0 4px;display:flex;align-items:center;gap:8px}
+.ad-container{text-align:center;padding:12px;min-height:90px;background:linear-gradient(135deg,#f8fafc,#f1f5f9);border-radius:12px;margin:16px 0;display:flex;align-items:center;justify-content:center;border:1px dashed var(--border)}
+.ad-container span{font-size:11px;color:var(--text3)}
+.fav-btn{background:none;border:none;font-size:18px;cursor:pointer;padding:4px}
+.bottom-nav{position:fixed;bottom:0;left:0;right:0;background:rgba(255,255,255,.92);backdrop-filter:blur(20px);border-top:1px solid var(--border);display:flex;justify-content:space-around;padding:8px 0 max(8px,env(safe-area-inset-bottom));z-index:50;max-width:430px;margin:0 auto}
+.nav-item{display:flex;flex-direction:column;align-items:center;gap:2px;padding:6px 16px;cursor:pointer;opacity:.4;transition:opacity .2s;font-size:10px;font-weight:600}
+.nav-item.active{opacity:1;color:var(--primary)}
+.nav-item .icon{font-size:22px}
+.page{display:none}.page.active{display:block;animation:fadeIn .3s ease}
+@keyframes fadeIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+.toast{position:fixed;top:20px;left:50%;transform:translateX(-50%) translateY(-100px);background:#1e293b;color:#fff;padding:10px 20px;border-radius:12px;font-size:13px;font-weight:500;z-index:100;transition:transform .4s cubic-bezier(.34,1.56,.64,1)}
+.toast.show{transform:translateX(-50%) translateY(0)}
+.chart-container{position:relative;height:180px;margin-top:12px}
+.chart-tabs{display:flex;gap:6px;margin-top:12px}
+.chart-tab{padding:6px 14px;border-radius:20px;border:none;font-size:12px;font-weight:600;cursor:pointer;background:var(--bg);color:var(--text2)}
+.chart-tab.active{background:var(--primary);color:#fff}
+</style>
+</head>
+<body>
+<div class="app">
+<div class="header"><h1>💱 Валюта курси</h1><p>Ўзбекистон Марказий банки курслари</p></div>
+<div class="page active" id="page-converter">
+<div class="card">
+<div class="converter-input"><label>Сотаман</label><div class="input-row"><div class="currency-select"><span class="flag" id="fromFlag">🇺🇸</span><span id="fromCode">USD</span><select id="fromCurrency" onchange="updateConverter()"></select></div><input type="number" class="amount-input" id="fromAmount" value="1" oninput="convert()"></div></div>
+<button class="swap-btn" onclick="swapCurrencies()">⇅</button>
+<div class="converter-input"><label>Оламан</label><div class="input-row"><div class="currency-select"><span class="flag" id="toFlag">🇺🇿</span><span id="toCode">UZS</span><select id="toCurrency" onchange="updateConverter()"></select></div><input type="number" class="amount-input" id="toAmount" readonly></div></div>
+<div class="result-box"><div class="amount" id="resultDisplay">1 USD = 12,850 UZS</div><div class="rate">Марказий банк курси</div></div>
+</div>
+<div class="ad-container"><span>📢 Реклама жойи</span></div>
+<div class="section-title">📊 Бугунги курслар</div>
+<div class="card" style="padding:12px"><div class="rates-grid" id="ratesList"></div></div>
+<div class="section-title">📈 Курс динамикаси</div>
+<div class="card"><div class="chart-tabs"><button class="chart-tab active" onclick="setChartPeriod(7,this)">7 кун</button><button class="chart-tab" onclick="setChartPeriod(14,this)">14 кун</button><button class="chart-tab" onclick="setChartPeriod(30,this)">30 кун</button></div><div class="chart-container"><canvas id="rateChart"></canvas></div></div>
+<div class="ad-container"><span>📢 Реклама жойи</span></div>
+</div>
+<div class="page" id="page-favorites"><div class="section-title" style="margin-top:16px">⭐ Севимлилар</div><div id="favList"><div style="text-align:center;padding:40px"><div style="font-size:48px">⭐</div><p style="color:var(--text2)">Севимли валюталар йўқ.</p></div></div></div>
+<div class="page" id="page-settings"><div class="section-title" style="margin-top:16px">⚙️ Созламалар</div><div class="card"><p style="font-size:13px;color:var(--text2);line-height:1.8;text-align:center">Валюта курси v1.0<br>UZ App Factory · 2026<br><br>Маълумотлар Ўзбекистон Республикаси Марказий банки асосида.</p></div></div>
+</div>
+<div class="bottom-nav">
+<div class="nav-item active" onclick="showPage('converter',this)"><span class="icon">💱</span>Конвертер</div>
+<div class="nav-item" onclick="showPage('favorites',this)"><span class="icon">⭐</span>Севимли</div>
+<div class="nav-item" onclick="showPage('settings',this)"><span class="icon">⚙️</span>Созлама</div>
+</div>
+<div class="toast" id="toast"></div>
+<script>
+const currencies=[{code:"USD",name_uz:"АҚШ доллари",flag:"🇺🇸",rate:12850,change:+15},{code:"EUR",name_uz:"Евро",flag:"🇪🇺",rate:14120,change:-28},{code:"RUB",name_uz:"Россия рубли",flag:"🇷🇺",rate:138.5,change:+0.8},{code:"GBP",name_uz:"Фунт стерлинг",flag:"🇬🇧",rate:16340,change:+42},{code:"KRW",name_uz:"Корея вони",flag:"🇰🇷",rate:9.12,change:-0.03},{code:"TRY",name_uz:"Турк лираси",flag:"🇹🇷",rate:335.2,change:-1.2},{code:"JPY",name_uz:"Япон йенаси",flag:"🇯🇵",rate:84.7,change:+0.2},{code:"CNY",name_uz:"Хитой юани",flag:"🇨🇳",rate:1762,change:+5},{code:"KZT",name_uz:"Қозоқ тенгеси",flag:"🇰🇿",rate:25.1,change:-0.1},{code:"AED",name_uz:"Дирҳам",flag:"🇦🇪",rate:3500,change:+8},{code:"CHF",name_uz:"Швейцария франки",flag:"🇨🇭",rate:15280,change:+35},{code:"CAD",name_uz:"Канада доллари",flag:"🇨🇦",rate:9180,change:-12}];
+const UZS={code:"UZS",name_uz:"Ўзбек сўми",flag:"🇺🇿",rate:1,change:0};const allCurrencies=[UZS,...currencies];
+let favorites=JSON.parse(localStorage.getItem("uz_fav")||"[]");let chartPeriod=7;
+function init(){populateSelects();renderRates();convert();drawChart()}
+function populateSelects(){const f=document.getElementById("fromCurrency"),t=document.getElementById("toCurrency");[f,t].forEach((s,i)=>{s.innerHTML="";allCurrencies.forEach(c=>{const o=document.createElement("option");o.value=c.code;o.textContent=c.flag+" "+c.code;if(i===0&&c.code==="USD")o.selected=true;if(i===1&&c.code==="UZS")o.selected=true;s.appendChild(o)})})}
+function updateConverter(){const f=allCurrencies.find(c=>c.code===document.getElementById("fromCurrency").value);const t=allCurrencies.find(c=>c.code===document.getElementById("toCurrency").value);if(f){document.getElementById("fromFlag").textContent=f.flag;document.getElementById("fromCode").textContent=f.code}if(t){document.getElementById("toFlag").textContent=t.flag;document.getElementById("toCode").textContent=t.code}convert()}
+function convert(){const fc=document.getElementById("fromCurrency").value,tc=document.getElementById("toCurrency").value,amt=parseFloat(document.getElementById("fromAmount").value)||0;const f=allCurrencies.find(c=>c.code===fc),t=allCurrencies.find(c=>c.code===tc);if(!f||!t)return;const r=t.rate===0?0:(amt*f.rate)/t.rate;document.getElementById("toAmount").value=r<1?r.toFixed(4):fmt(Math.round(r*100)/100);if(fc==="UZS")document.getElementById("resultDisplay").textContent=`1 ${tc} = ${fmt(Math.round(t.rate))} UZS`;else if(tc==="UZS")document.getElementById("resultDisplay").textContent=`1 ${fc} = ${fmt(Math.round(f.rate))} UZS`;else document.getElementById("resultDisplay").textContent=`1 ${fc} = ${fmt(Math.round(f.rate/t.rate*100)/100)} ${tc}`}
+function swapCurrencies(){const f=document.getElementById("fromCurrency"),t=document.getElementById("toCurrency");const v=f.value;f.value=t.value;t.value=v;updateConverter();showToast("Алмаштирилди ⇅")}
+function renderRates(){document.getElementById("ratesList").innerHTML=currencies.map(c=>{const fav=favorites.includes(c.code);const cls=c.change>0?"up":c.change<0?"down":"";const ico=c.change>0?"▲":c.change<0?"▼":"—";return`<div class="rate-item" onclick="quickConvert('${c.code}')"><div class="rate-left"><div class="rate-flag">${c.flag}</div><div><div class="rate-code">${c.code}</div><div class="rate-name">${c.name_uz}</div></div></div><div style="display:flex;align-items:center;gap:10px"><div class="rate-right"><div class="rate-value">${fmt(c.rate)}</div><div class="rate-change ${cls}">${ico} ${Math.abs(c.change)}</div></div><button class="fav-btn" onclick="event.stopPropagation();toggleFav('${c.code}')">${fav?"⭐":"☆"}</button></div></div>`}).join("")}
+function quickConvert(c){document.getElementById("fromCurrency").value=c;document.getElementById("toCurrency").value="UZS";document.getElementById("fromAmount").value=1;updateConverter();window.scrollTo({top:0,behavior:"smooth"})}
+function toggleFav(c){if(favorites.includes(c))favorites=favorites.filter(x=>x!==c);else favorites.push(c);localStorage.setItem("uz_fav",JSON.stringify(favorites));renderRates();showToast(favorites.includes(c)?c+" ⭐ қўшилди":c+" олиб ташланди")}
+function drawChart(){const canvas=document.getElementById("rateChart"),ctx=canvas.getContext("2d"),cont=canvas.parentElement;canvas.width=cont.offsetWidth*2;canvas.height=cont.offsetHeight*2;canvas.style.width=cont.offsetWidth+"px";canvas.style.height=cont.offsetHeight+"px";ctx.scale(2,2);const w=cont.offsetWidth,h=cont.offsetHeight,p={t:20,r:10,b:30,l:50};const base=12850,data=[];for(let i=chartPeriod;i>=0;i--){const d=new Date();d.setDate(d.getDate()-i);data.push({date:d,rate:base+Math.round((Math.random()-.45)*200)})}const rates=data.map(d=>d.rate),mn=Math.min(...rates)-50,mx=Math.max(...rates)+50,rng=mx-mn,cw=w-p.l-p.r,ch=h-p.t-p.b;ctx.clearRect(0,0,w,h);ctx.strokeStyle="#e2e8f0";ctx.lineWidth=.5;for(let i=0;i<=4;i++){const y=p.t+(ch/4)*i;ctx.beginPath();ctx.moveTo(p.l,y);ctx.lineTo(w-p.r,y);ctx.stroke();ctx.fillStyle="#94a3b8";ctx.font="10px system-ui";ctx.textAlign="right";ctx.fillText(fmt(Math.round(mx-(rng/4)*i)),p.l-6,y+3)}ctx.textAlign="center";const st=Math.max(1,Math.floor(data.length/6));data.forEach((d,i)=>{if(i%st===0||i===data.length-1){const x=p.l+(i/(data.length-1))*cw;ctx.fillText(d.date.getDate()+"/"+(d.date.getMonth()+1),x,h-8)}});ctx.beginPath();data.forEach((d,i)=>{const x=p.l+(i/(data.length-1))*cw,y=p.t+(1-(d.rate-mn)/rng)*ch;i===0?ctx.moveTo(x,y):ctx.lineTo(x,y)});ctx.strokeStyle="#3b82f6";ctx.lineWidth=2.5;ctx.lineJoin="round";ctx.stroke();const lx=p.l+cw,ly=p.t+(1-(data[data.length-1].rate-mn)/rng)*ch;ctx.lineTo(lx,p.t+ch);ctx.lineTo(p.l,p.t+ch);ctx.closePath();const gr=ctx.createLinearGradient(0,p.t,0,p.t+ch);gr.addColorStop(0,"rgba(59,130,246,.2)");gr.addColorStop(1,"rgba(59,130,246,.01)");ctx.fillStyle=gr;ctx.fill();ctx.beginPath();ctx.arc(lx,ly,4,0,Math.PI*2);ctx.fillStyle="#3b82f6";ctx.fill();ctx.strokeStyle="#fff";ctx.lineWidth=2;ctx.stroke()}
+function setChartPeriod(d,el){chartPeriod=d;document.querySelectorAll(".chart-tab").forEach(t=>t.classList.remove("active"));el.classList.add("active");drawChart()}
+function showPage(n,el){document.querySelectorAll(".page").forEach(p=>p.classList.remove("active"));document.getElementById("page-"+n).classList.add("active");document.querySelectorAll(".nav-item").forEach(x=>x.classList.remove("active"));if(el)el.classList.add("active")}
+function fmt(n){if(typeof n!=="number")n=parseFloat(n);return isNaN(n)?"0":n.toLocaleString("uz-UZ")}
+function showToast(m){const t=document.getElementById("toast");t.textContent=m;t.classList.add("show");setTimeout(()=>t.classList.remove("show"),2000)}
+if("serviceWorker"in navigator)navigator.serviceWorker.register("sw.js").catch(()=>{});
+init();window.addEventListener("resize",drawChart);
+</script>
+</body>
+</html>
